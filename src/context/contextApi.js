@@ -1,23 +1,23 @@
 import React, { createContext, useState, useEffect } from 'react';
-import { fetchDataFromApi } from '../utils/api';
 
+import { fetchDataFromApi } from '../utils/api';
 export const Context = createContext();
 
 export const AppContext = (props) => {
   const [loading, setLoading] = useState(false);
-  const [searchResults, setSearchResults] = useState(false);
-  const [selectCategories, setSelectCategories] = useState('New');
+  const [searchResults, setSearchResults] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState('New');
   const [mobileMenu, setMobileMenu] = useState(false);
 
   useEffect(() => {
-    fetchSelectCategoryData(selectCategories);
-  }, [selectCategories]);
+    fetchSelectedCategoryData(selectedCategory);
+  }, [selectedCategory]);
 
-  const fetchSelectCategoryData = (query) => {
+  const fetchSelectedCategoryData = (query) => {
     setLoading(true);
-    fetchDataFromApi(`search/?q=${query}`).then((contents) => {
+    fetchDataFromApi(`search/?q=${query}`).then(({ contents }) => {
       console.log(contents);
-      // setSearchResults(res);
+      setSearchResults(contents);
       setLoading(false);
     });
   };
@@ -28,8 +28,8 @@ export const AppContext = (props) => {
         loading,
         setLoading,
         searchResults,
-        setSelectCategories,
-        selectCategories,
+        selectedCategory,
+        setSelectedCategory,
         mobileMenu,
         setMobileMenu,
       }}
